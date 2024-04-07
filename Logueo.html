@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de CURP</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffa726; /* Fondo naranja */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: white; /* Color de texto blanco */
+        }
+        h2 {
+            text-align: center;
+        }
+        form {
+            max-width: 600px;
+            background-color: #42a5f5; /* Cuadro del formulario en azul */
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        label {
+            font-weight: bold;
+        }
+        input[type="text"], select {
+            width: calc(100% - 20px);
+            padding: 8px;
+            margin: 5px 0 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #resultado {
+            text-align: center;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        #qrCode {
+            margin-left: 20px;
+            text-align: center;
+        }
+        #resultado, #qrCode {
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <h2>Generador de CURP</h2>
+        <form id="curpForm">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" required><br><br>
+
+            <label for="apellido_paterno">Apellido Paterno:</label>
+            <input type="text" id="apellido_paterno" name="apellido_paterno" required><br><br>
+
+            <label for="apellido_materno">Apellido Materno:</label>
+            <input type="text" id="apellido_materno" name="apellido_materno" required><br><br>
+
+            <label for="fecha_nacimiento">Fecha de Nacimiento:</label>
+            <input type="text" id="fecha_nacimiento" name="fecha_nacimiento" placeholder="AAAA-MM-DD" required><br><br>
+
+            <label for="sexo">Genero:</label>
+            <select id="sexo" name="sexo" required>
+                <option value="">Genero</option>
+                <option value="H">Hombre</option>
+                <option value="M">Mujer</option>
+            </select><br><br>
+
+            <label for="estado">Entidad Federativa:</label>
+            <select id="estado" name="estado" required>
+                <option value="">Selecciona tu entidad de nacimiento</option>
+                  <option value="AS">Aguascalientes</option>
+                  <option value="BC">Baja California</option>
+                  <option value="BS">Baja California Sur</option>
+                  <option value="CC">Campeche</option>
+                  <option value="CS">Chiapas</option>
+                  <option value="CH">Chihuahua</option>
+                  <option value="CL">Coahuila</option>
+                  <option value="CM">Colima</option>
+                  <option value="DF">Ciudad de México</option>
+                  <option value="DG">Durango</option>
+                  <option value="GT">Guanajuato</option>
+                  <option value="GR">Guerrero</option>
+                  <option value="HG">Hidalgo</option>
+                  <option value="JC">Jalisco</option>
+                  <option value="MC">México</option>
+                  <option value="MN">Michoacán</option>
+                  <option value="MS">Morelos</option>
+                  <option value="NT">Nayarit</option>
+                  <option value="NL">Nuevo León</option>
+                  <option value="OC">Oaxaca</option>
+                  <option value="PL">Puebla</option>
+                  <option value="QT">Querétaro</option>
+                  <option value="QR">Quintana Roo</option>
+                  <option value="SP">San Luis Potosí</option>
+                  <option value="SL">Sinaloa</option>
+                  <option value="SR">Sonora</option>
+                  <option value="TC">Tabasco</option>
+                  <option value="TS">Tamaulipas</option>
+                  <option value="TL">Tlaxcala</option>
+                  <option value="VZ">Veracruz</option>
+                  <option value="YN">Yucatán</option>
+                  <option value="ZS">Zacatecas</option>
+            </select><br><br>
+
+            <button type="submit">Generar CURP</button>
+        </form>
+    </div>
+
+    <div id="resultado"></div>
+
+    <div id="qrCode">
+        <img id="qrImg" src="" alt="Código QR de CURP">
+    </div>
+
+    <script>
+        document.getElementById('curpForm').addEventListener('submit', function(event) {
+            event.preventDefault(); 
+            var formData = new FormData(this); 
+
+            
+            fetch('/', {
+                method: 'POST',
+                body: formData 
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("resultado").innerText = "La CURP generada es: " + data.curp;
+                document.getElementById("qrImg").src = data.qr_img;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    </script>
+</body>
+</html>
